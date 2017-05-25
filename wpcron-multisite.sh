@@ -8,11 +8,11 @@
 # is highly recommended
 # set $AS_ROOT variable to 1 if running this script as the root user
 
-WP_PATH="/var/www/html/wordpress/jasontest/"
-SITE_NAME="jasontest"
+WP_PATH="/path/to/wordpress"
+SITE_NAME="sitename"
 LOCK_FILE="/tmp/wp-cron-${SITE_NAME}.lock"
 # path to wp-cli binary
-WPCLI="/usr/bin/wp"
+WPCLI="/path/to/wp-cli"
 AS_ROOT=0
 FLAGS=""
 
