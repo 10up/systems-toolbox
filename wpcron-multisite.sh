@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 #
+# wpcron-multisite.sh
 # bash script to execute pending cron events for all sites on a WordPress multisite install
 # set: `define('DISABLE_WP_CRON', true);` in wp-config.php to prevent cron from spawning
 # on page loads, and configure this script to run out of the system cron.
