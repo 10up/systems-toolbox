@@ -51,5 +51,5 @@ DIFF=$(echo $END - $START | bc)
 echo
 echo "total wp-cron run time $DIFF"
 echo
-sleep 60
+
 rm -f $LOCK_FILE
