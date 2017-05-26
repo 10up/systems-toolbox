@@ -14,8 +14,6 @@ SITE_NAME="sitename"
 LOCK_FILE="/tmp/wp-cron-${SITE_NAME}.lock"
 # path to wp-cli binary
 WPCLI="/path/to/wp-cli"
-AS_ROOT=0
-FLAGS=""
 
 cleanup() {
     # remove file lock if the script dies
@@ -33,15 +31,15 @@ trap cleanup EXIT
 
 touch $LOCK_FILE
 
-if [ $AS_ROOT -eq 1 ]; then FLAGS="--allow-root"; fi
+if [[ $EUID -eq 0 ]]; then WPCLI="$WPCLI --allow-root"; fi
 
 echo "executing wp-cron at $(date)"
 START=$(date +%s.%N)
-for site in $($WPCLI $FLAGS --allow-root --path=$WP_PATH site list --field=url)
+for site in $($WPCLI --path=$WP_PATH site list --field=url)
 do
     echo "running cron for $site"
     SITESTART=$(date +%s.%N)
-    $WPCLI $FLAGS --path=$WP_PATH cron event run --due-now --url=$site
+    $WPCLI --path=$WP_PATH cron event run --due-now --url=$site
     SITEEND=$(date +%s.%N)
     DIFF=$(echo $SITEEND - $SITESTART | bc)
     echo "total run time for $site $DIFF"

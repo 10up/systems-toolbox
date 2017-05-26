@@ -8,20 +8,18 @@
 WP_PATH="/path/to/wordpress/"
 # path to wp-cli binary
 WPCLI="/usr/local/bin/wp"
-AS_ROOT=0
-FLAGS=""
 
 alert='alertemail@domain.com'
 # alert when cron events go above
 max_events=100
 
-if [ $AS_ROOT -eq 1 ]; then FLAGS="--allow-root"; fi
+if [[ $EUID -eq 0 ]]; then WPCLI="$WPCLI --allow-root"; fi
 
-cd $WP_PATH
-for site in $($WPCLI $FLAGS --allow-root site list --field=url)
+cd $WP_PATH || exit
+for site in $($WPCLI site list --field=url)
 do
 
-  events=$($WPCLI $FLAGS --url=$site option get cron --format=json)
+  events=$($WPCLI --url=$site option get cron --format=json)
   num_events=$(echo $events | jq '. | length')
   if [ $num_events -gt $max_events ]
   then
